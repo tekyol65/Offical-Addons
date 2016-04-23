@@ -6,9 +6,6 @@ using LeagueSharp.Common;
 using SPrediction;
 using SharpDX;
 using Color = System.Drawing.Color;
-using Collision = LeagueSharp.Common.Collision;
-using Spell = LeagueSharp.Common.Spell;
-using Utility = LeagueSharp.Common.Utility;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
@@ -20,7 +17,7 @@ namespace Kalista
     class Program
     {
         static AIHeroClient Player { get { return ObjectManager.Player; } }
-        static Spell Q, W, E, R;
+        static LeagueSharp.Common.Spell Q, W, E, R;
         static Menu Menu,draw, combo, harass, laneclear, jungleclear, misc;
         static float getManaPer { get { return Player.Mana / Player.MaxMana * 100; } }
 
@@ -62,10 +59,10 @@ namespace Kalista
                 return;
             }
 
-            Q = new Spell(SpellSlot.Q, 1150f) { MinHitChance = HitChance.High };
-            W = new Spell(SpellSlot.W, 5000f);
-            E = new Spell(SpellSlot.E, 1000f);
-            R = new Spell(SpellSlot.R, 1500f);
+            Q = new LeagueSharp.Common.Spell(SpellSlot.Q, 1150f) { MinHitChance = HitChance.High };
+            W = new LeagueSharp.Common.Spell(SpellSlot.W, 5000f);
+            E = new LeagueSharp.Common.Spell(SpellSlot.E, 1000f);
+            R = new LeagueSharp.Common.Spell(SpellSlot.R, 1500f);
 
             Q.SetSkillshot(0.25f, 40f, 1200f, true, SkillshotType.SkillshotLine);
 
@@ -133,7 +130,7 @@ namespace Kalista
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && args.SData.Name == E.Instance.Name)
-                Utility.DelayAction.Add(250, () => Orbwalker.ResetAutoAttack());
+                LeagueSharp.Common.Utility.DelayAction.Add(250, () => Orbwalker.ResetAutoAttack());
 
             if (soulboundsaver && R.IsReady())
             {
@@ -170,17 +167,17 @@ namespace Kalista
             if (Player.IsDead)
                 return;
 
-            if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Combo)
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                 Combo();
 
-            if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.Harass)
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass))
                 Harass();
 
-            if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.LaneClear)
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
             {
                 Laneclear();
             }
-            if (Orbwalker.ActiveModesFlags == Orbwalker.ActiveModes.JungleClear)
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
                 Jungleclear();
             }
@@ -250,7 +247,7 @@ namespace Kalista
 
             input.CollisionObjects[0] = CollisionableObjects.Minions;
 
-            return Collision.GetCollision(new List<Vector3> { targetposition }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
+            return LeagueSharp.Common.Collision.GetCollision(new List<Vector3> { targetposition }, input).OrderBy(obj => obj.Distance(source, false)).ToList();
         }
 
         static void Combo()
