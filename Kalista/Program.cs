@@ -47,8 +47,8 @@ namespace Kalista
         public static bool drawingW { get { return draw["drawingW"].Cast<CheckBox>().CurrentValue; } }
         public static bool drawingE { get { return draw["drawingE"].Cast<CheckBox>().CurrentValue; } }
         public static bool drawingR { get { return draw["drawingR"].Cast<CheckBox>().CurrentValue; } }
-        public static bool healthbar { get { return draw["Draw_EDamage"].Cast<CheckBox>().CurrentValue; } }
-        public static bool percent { get { return draw["Draw_Fill"].Cast<CheckBox>().CurrentValue; } }
+        public static bool healthbar { get { return draw["healthbar"].Cast<CheckBox>().CurrentValue; } }
+        public static bool percent { get { return draw["percent"].Cast<CheckBox>().CurrentValue; } }
         #endregion
 
         private static void Loading_OnLoadingComplete(EventArgs args)
