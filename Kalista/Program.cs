@@ -57,7 +57,7 @@ namespace Kalista
 
         private static void Loading_OnLoadingComplete(EventArgs args)
         {
-            if (Player.Hero != Champion.Jinx)
+            if (Player.Hero != Champion.Kalista)
             {
                 return;
             }
