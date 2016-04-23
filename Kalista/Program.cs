@@ -105,7 +105,7 @@ namespace Kalista
             draw.Add("healthbar", new CheckBox("Healthbar overlay"));
             draw.Add("percent", new CheckBox("Damage percent info"));
 
-            Intro = new Render.Sprite(LoadImg("intro"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+            Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
             Intro.Add(0);
             Intro.OnDraw();
 
