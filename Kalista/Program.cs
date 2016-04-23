@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using EloBuddy;
 using LeagueSharp.Common;
-using SPrediction;
 using SharpDX;
 using Color = System.Drawing.Color;
 using EloBuddy.SDK.Events;
@@ -27,29 +26,29 @@ namespace Kalista
         }
 
         #region menu items
-        public static bool comboUseQ { get { return Menu["comboUseQ"].Cast<CheckBox>().CurrentValue; } }
-        public static bool comboUseE { get { return Menu["comboUseE"].Cast<CheckBox>().CurrentValue; } }
-        public static bool harassUseQ { get { return Menu["harassUseQ"].Cast<CheckBox>().CurrentValue; } }
-        public static int harassMana { get { return Menu["harassMana"].Cast<Slider>().CurrentValue; } }
-        public static bool laneclearUseQ { get { return Menu["laneclearUseQ"].Cast<CheckBox>().CurrentValue; } }
-        public static int laneclearQnum { get { return Menu["laneclearQnum"].Cast<Slider>().CurrentValue; } }
-        public static bool laneclearUseE { get { return Menu["laneclearUseE"].Cast<CheckBox>().CurrentValue; } }
-        public static int laneclearEnum { get { return Menu["laneclearEnum"].Cast<Slider>().CurrentValue; } }
-        public static int laneclearMana { get { return Menu["laneclearMana"].Cast<Slider>().CurrentValue; } }
-        public static bool jungleclearUseQ { get { return Menu["jungleclearUseQ"].Cast<CheckBox>().CurrentValue; } }
-        public static bool jungleclearUseE { get { return Menu["jungleclearUseE"].Cast<CheckBox>().CurrentValue; } }
-        public static int jungleclearMana { get { return Menu["jungleclearMana"].Cast<Slider>().CurrentValue; } }
-        public static bool killsteal { get { return Menu["killsteal"].Cast<CheckBox>().CurrentValue; } }
-        public static bool mobsteal { get { return Menu["mobsteal"].Cast<CheckBox>().CurrentValue; } }
-        public static bool lasthitassist { get { return Menu["lasthitassist"].Cast<CheckBox>().CurrentValue; } }
-        public static bool soulboundsaver { get { return Menu["soulboundsaver"].Cast<CheckBox>().CurrentValue; } }
-        public static bool autoEHarass1 { get { return Menu["autoEHarass1"].Cast<CheckBox>().CurrentValue; } }
-        public static bool drawingQ { get { return Menu["drawingQ"].Cast<CheckBox>().CurrentValue; } }
-        public static bool drawingW { get { return Menu["drawingW"].Cast<CheckBox>().CurrentValue; } }
-        public static bool drawingE { get { return Menu["drawingE"].Cast<CheckBox>().CurrentValue; } }
-        public static bool drawingR { get { return Menu["drawingR"].Cast<CheckBox>().CurrentValue; } }
-        public static bool Draw_EDamage { get { return Menu["Draw_EDamage"].Cast<CheckBox>().CurrentValue; } }
-        public static bool Draw_Fill { get { return Menu["Draw_Fill"].Cast<CheckBox>().CurrentValue; } }
+        public static bool comboUseQ { get { return combo["comboUseQ"].Cast<CheckBox>().CurrentValue; } }
+        public static bool comboUseE { get { return combo["comboUseE"].Cast<CheckBox>().CurrentValue; } }
+        public static bool harassUseQ { get { return harass["harassUseQ"].Cast<CheckBox>().CurrentValue; } }
+        public static int harassMana { get { return harass["harassMana"].Cast<Slider>().CurrentValue; } }
+        public static bool laneclearUseQ { get { return laneclear["laneclearUseQ"].Cast<CheckBox>().CurrentValue; } }
+        public static int laneclearQnum { get { return laneclear["laneclearQnum"].Cast<Slider>().CurrentValue; } }
+        public static bool laneclearUseE { get { return laneclear["laneclearUseE"].Cast<CheckBox>().CurrentValue; } }
+        public static int laneclearEnum { get { return laneclear["laneclearEnum"].Cast<Slider>().CurrentValue; } }
+        public static int laneclearMana { get { return laneclear["laneclearMana"].Cast<Slider>().CurrentValue; } }
+        public static bool jungleclearUseQ { get { return jungleclear["jungleclearUseQ"].Cast<CheckBox>().CurrentValue; } }
+        public static bool jungleclearUseE { get { return jungleclear["jungleclearUseE"].Cast<CheckBox>().CurrentValue; } }
+        public static int jungleclearMana { get { return jungleclear["jungleclearMana"].Cast<Slider>().CurrentValue; } }
+        public static bool killsteal { get { return misc["killsteal"].Cast<CheckBox>().CurrentValue; } }
+        public static bool mobsteal { get { return misc["mobsteal"].Cast<CheckBox>().CurrentValue; } }
+        public static bool lasthitassist { get { return misc["lasthitassist"].Cast<CheckBox>().CurrentValue; } }
+        public static bool soulboundsaver { get { return misc["soulboundsaver"].Cast<CheckBox>().CurrentValue; } }
+        public static bool autoEHarass1 { get { return misc["autoEHarass1"].Cast<CheckBox>().CurrentValue; } }
+        public static bool drawingQ { get { return draw["drawingQ"].Cast<CheckBox>().CurrentValue; } }
+        public static bool drawingW { get { return draw["drawingW"].Cast<CheckBox>().CurrentValue; } }
+        public static bool drawingE { get { return draw["drawingE"].Cast<CheckBox>().CurrentValue; } }
+        public static bool drawingR { get { return draw["drawingR"].Cast<CheckBox>().CurrentValue; } }
+        public static bool healthbar { get { return draw["Draw_EDamage"].Cast<CheckBox>().CurrentValue; } }
+        public static bool percent { get { return draw["Draw_Fill"].Cast<CheckBox>().CurrentValue; } }
         #endregion
 
         private static void Loading_OnLoadingComplete(EventArgs args)
@@ -101,16 +100,8 @@ namespace Kalista
             draw.Add("drawingW", new CheckBox("W Range",false));
             draw.Add("drawingE", new CheckBox("E Range"));
             draw.Add("drawingR", new CheckBox("R Range",false));
-            var drawDamageMenu = draw.Add("Draw_EDamage", new CheckBox("Draw (E) Damage"));
-            var drawFill = draw.Add("Draw_Fill", new CheckBox("Draw (E) Damage Fill"));
-
-            DamageIndicator.DamageToUnit = GetComboDamage;
-            DamageIndicator.Enabled = Draw_EDamage;
-            DamageIndicator.Fill = Draw_Fill;
-            DamageIndicator.FillColor = Color.FromArgb(90, 255, 169, 4);
-
-            drawDamageMenu.OnValueChange += DrawDamageMenu_OnValueChange;
-            drawFill.OnValueChange += DrawFill_OnValueChange;
+            draw.Add("healthbar", new CheckBox("Healthbar overlay"));
+            draw.Add("percent", new CheckBox("Damage percent info"));
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -147,19 +138,32 @@ namespace Kalista
         private static void Drawing_OnDraw(EventArgs args)
         {
             if (Player.IsDead)
+            {
                 return;
-                       
-            if (Q.IsReady() && drawingQ)
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Color.FromArgb(0, 230, 255));
+            }
 
+            if (Q.IsReady() && drawingQ)
+            {
+                LeagueSharp.Common.Utility.DrawCircle(Player.Position, Q.Range, Color.FromArgb(0, 230, 255));
+            }
             if (W.IsReady() && drawingW)
-                Render.Circle.DrawCircle(Player.Position, W.Range, Color.FromArgb(0, 230, 255));
+            {
+                LeagueSharp.Common.Utility.DrawCircle(Player.Position, W.Range, Color.FromArgb(0, 230, 255));
+            }
 
             if (E.IsReady() && drawingE)
-                Render.Circle.DrawCircle(Player.Position, E.Range, Color.FromArgb(0, 230, 255));
+            {
+                LeagueSharp.Common.Utility.DrawCircle(Player.Position, E.Range, Color.FromArgb(0, 230, 255));
+            }
 
             if (R.IsReady() && drawingR)
-                Render.Circle.DrawCircle(Player.Position, R.Range, Color.FromArgb(0, 230, 255));
+            {
+                LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, Color.FromArgb(0, 230, 255));
+            }
+
+            DamageIndicator.HealthbarEnabled = healthbar;
+            DamageIndicator.PercentEnabled = percent;
+
         }
 
         private static void Game_OnUpdate(EventArgs args)
@@ -257,7 +261,9 @@ namespace Kalista
                 var Qtarget = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
 
                 if (Q.CanCast(Qtarget) && !Player.IsDashing())
-                    Q.SPredictionCast(Qtarget, Q.MinHitChance);
+                {
+                    Q.CastIfHitchanceEquals(Qtarget, Q.MinHitChance);
+                }
             }
 
             if (comboUseE && E.IsReady())
@@ -265,7 +271,9 @@ namespace Kalista
                 var eTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage(x) >= 1 && !x.HasBuffOfType(BuffType.Invulnerability) && !x.HasBuffOfType(BuffType.SpellShield)).OrderByDescending(x => E.GetDamage(x)).FirstOrDefault();
 
                 if (eTarget != null && eTarget.isKillableAndValidTarget(E.GetDamage(eTarget)))
+                {
                     E.Cast();
+                }
             }
         }
 
@@ -279,7 +287,9 @@ namespace Kalista
                 var Qtarget = TargetSelector.GetTarget(Q.Range, DamageType.Physical);
 
                 if (Q.CanCast(Qtarget) && !Player.IsDashing())
-                    Q.SPredictionCast(Qtarget, Q.MinHitChance);
+                {
+                    Q.CastIfHitchanceEquals(Qtarget, Q.MinHitChance);
+                }
             }
         }
 
@@ -303,7 +313,9 @@ namespace Kalista
                     foreach (var colminion in Q_GetCollisionMinions(Player, (Vector3)Player.ServerPosition.Extend(minion.ServerPosition, Q.Range)))
                     {
                         if (colminion.Health <= Q.GetDamage(colminion))
+                        {
                             killcount++;
+                        }
                         else
                             break;
                     }
@@ -327,7 +339,9 @@ namespace Kalista
                 foreach (var Minion in Minions.Where(x => E.CanCast(x) && x.Health <= E.GetDamage(x))) { minionkillcount++; }
 
                 if (minionkillcount >= laneclearEnum)
+                {
                     E.Cast();
+                }
             }
         }
 
@@ -342,24 +356,17 @@ namespace Kalista
                 return;
 
             if (jungleclearUseQ && Q.CanCast(Mobs[0]))
+            {
                 Q.Cast(Mobs[0]);
+            }
 
             if (jungleclearUseE && E.isReadyPerfectly())
+            {
                 if (Mobs.Any(x => x.isKillableAndValidTarget(E.GetDamage(x))))
+                {
                     E.Cast();
+                }
+            }
         }
-
-        private static void DrawFill_OnValueChange(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
-        {
-            DamageIndicator.Fill = args.NewValue;
-            DamageIndicator.FillColor = Color.FromArgb(90, 255, 169, 4);
-        }
-
-        private static void DrawDamageMenu_OnValueChange(ValueBase<bool> sender, ValueBase<bool>.ValueChangeArgs args)
-        {
-            DamageIndicator.Enabled = args.NewValue;
-        }
-
-
     }
 }

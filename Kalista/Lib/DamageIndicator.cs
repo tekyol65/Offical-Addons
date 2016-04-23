@@ -1,77 +1,78 @@
 ﻿using System;
 using System.Linq;
 using EloBuddy;
-using LeagueSharp.Common;
+using EloBuddy.SDK;
+using SharpDX;
 using Color = System.Drawing.Color;
 
 namespace Kalista.Lib
 {
-    class DamageIndicator//by xSalice
+    public static class DamageIndicator
     {
+        private const int BarWidth = 104;
+        private const int LineThickness = 9;
+
         public delegate float DamageToUnitDelegate(AIHeroClient hero);
 
-        private const int XOffset = 10;
-        private const int YOffset = 20;
-        private const int Width = 103;
-        private const int Height = 8;
+        private static DamageToUnitDelegate DamageToUnit { get; set; }
 
-        public static Color Color = Color.Lime;
-        public static Color FillColor = Color.Goldenrod;
-        public static bool Fill = true;
+        private static readonly Vector2 BarOffset = new Vector2(2, 10 + LineThickness / 2f);
 
-        public static bool Enabled = true;
-        private static DamageToUnitDelegate _damageToUnit;
-
-        private static readonly Render.Text Text = new Render.Text(0, 0, "", 14, SharpDX.Color.Red, "monospace");
-
-        public static DamageToUnitDelegate DamageToUnit
+        private static Color _drawingColor;
+        public static Color DrawingColor
         {
-            get { return _damageToUnit; }
-
-            set
-            {
-                if (_damageToUnit == null)
-                {
-                    Drawing.OnDraw += Drawing_OnDraw;
-                }
-                _damageToUnit = value;
-            }
+            get { return _drawingColor; }
+            set { _drawingColor = Color.FromArgb(170, value); }
         }
 
-        private static void Drawing_OnDraw(EventArgs args)
+        public static bool HealthbarEnabled { get; set; }
+        public static bool PercentEnabled { get; set; }
+
+        public static void Initialize(DamageToUnitDelegate damageToUnit)
         {
-            if (!Enabled || _damageToUnit == null)
+            // Apply needed field delegate for damage calculation
+            DamageToUnit = damageToUnit;
+            DrawingColor = Color.Green;
+            HealthbarEnabled = true;
+
+            // Register event handlers
+            Drawing.OnEndScene += OnEndScene;
+        }
+
+        private static void OnEndScene(EventArgs args)
+        {
+            if (HealthbarEnabled || PercentEnabled)
             {
-                return;
-            }
-
-            foreach (var unit in HeroManager.Enemies.Where(h => h.IsValid && h.IsHPBarRendered))
-            {
-                var barPos = unit.HPBarPosition;
-                var damage = _damageToUnit(unit);
-                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
-                var yPos = barPos.Y + YOffset;
-                var xPosDamage = barPos.X + XOffset + Width * percentHealthAfterDamage;
-                var xPosCurrentHp = barPos.X + XOffset + Width * unit.Health / unit.MaxHealth;
-
-                if (damage > unit.Health)
+                foreach (var unit in EntityManager.Heroes.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
                 {
-                    Text.X = (int)barPos.X + XOffset;
-                    Text.Y = (int)barPos.Y + YOffset - 13;
-                    Text.text = "Killable: " + (unit.Health - damage);
-                    Text.OnEndScene();
-                }
+                    // Get damage to unit
+                    var damage = DamageToUnit(unit);
 
-                Drawing.DrawLine(xPosDamage, yPos, xPosDamage, yPos + Height, 1, Color);
-
-                if (Fill)
-                {
-                    float differenceInHP = xPosCurrentHp - xPosDamage;
-                    var pos1 = barPos.X + 9 + (107 * percentHealthAfterDamage);
-
-                    for (int i = 0; i < differenceInHP; i++)
+                    // Continue on 0 damage
+                    if (damage <= 0)
                     {
-                        Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);
+                        continue;
+                    }
+
+                    if (HealthbarEnabled)
+                    {
+                        // Get remaining HP after damage applied in percent and the current percent of health
+                        var damagePercentage = ((unit.TotalShieldHealth() - damage) > 0 ? (unit.TotalShieldHealth() - damage) : 0) /
+                                               (unit.MaxHealth + unit.AllShield + unit.AttackShield + unit.MagicShield);
+                        var currentHealthPercentage = unit.TotalShieldHealth() / (unit.MaxHealth + unit.AllShield + unit.AttackShield + unit.MagicShield);
+
+                        // Calculate start and end point of the bar indicator
+                        var startPoint = new Vector2((int)(unit.HPBarPosition.X + BarOffset.X + damagePercentage * BarWidth), (int)(unit.HPBarPosition.Y + BarOffset.Y) - 5);
+                        var endPoint = new Vector2((int)(unit.HPBarPosition.X + BarOffset.X + currentHealthPercentage * BarWidth) + 1, (int)(unit.HPBarPosition.Y + BarOffset.Y) - 5);
+
+                        // Draw the line
+                        Drawing.DrawLine(startPoint, endPoint, LineThickness, DrawingColor);
+                    }
+
+                    if (PercentEnabled)
+                    {
+                        // Get damage in percent and draw next to the health bar
+                        Drawing.DrawText(unit.HPBarPosition - new Vector2(0, 12), unit.TotalShieldHealth() < damage ? Color.LawnGreen : Color.Red, string.Concat(Math.Ceiling((damage / unit.TotalShieldHealth()) * 100), "%"), 10);
                     }
                 }
             }

@@ -95,23 +95,6 @@
     <Compile Include="Lib\LeagueSharp-Common\WeightedRandom.cs" />
     <Compile Include="Lib\LeagueSharp-Common\WindowsMessages.cs" />
     <Compile Include="Lib\LeagueSharp-Common\WndEventComposition.cs" />
-    <Compile Include="Lib\SPrediction\ArcPrediction.cs" />
-    <Compile Include="Lib\SPrediction\CirclePrediction.cs" />
-    <Compile Include="Lib\SPrediction\ClipperWrapper.cs" />
-    <Compile Include="Lib\SPrediction\Collision.cs" />
-    <Compile Include="Lib\SPrediction\ConePrediction.cs" />
-    <Compile Include="Lib\SPrediction\ConfigMenu.cs" />
-    <Compile Include="Lib\SPrediction\Drawings.cs" />
-    <Compile Include="Lib\SPrediction\Geometry.cs" />
-    <Compile Include="Lib\SPrediction\LinePrediction.cs" />
-    <Compile Include="Lib\SPrediction\Obj_AI_HeroExtensions.cs" />
-    <Compile Include="Lib\SPrediction\PathTracker.cs" />
-    <Compile Include="Lib\SPrediction\Prediction.cs" />
-    <Compile Include="Lib\SPrediction\RingPrediction.cs" />
-    <Compile Include="Lib\SPrediction\SpellExtensions.cs" />
-    <Compile Include="Lib\SPrediction\StasisPrediction.cs" />
-    <Compile Include="Lib\SPrediction\Utility.cs" />
-    <Compile Include="Lib\SPrediction\VectorPrediction.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
