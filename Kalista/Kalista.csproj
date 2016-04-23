@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F172D22A-CC49-4166-9B48-4B8AD045E4C4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Kalista</RootNamespace>
+    <AssemblyName>Kalista</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EloBuddy">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.dll</HintPath>
+    </Reference>
+    <Reference Include="EloBuddy.SDK">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\EloBuddy.SDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D9">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.Direct3D9.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Lib\DamageIndicator.cs" />
+    <Compile Include="Lib\ExtraExtensions.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\AntiGapcloser.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Circle.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Config.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Cursor.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\CustomEvents.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Damage.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Dash.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\EnumerableExtensions.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\GamePacket.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Geometry.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\HealthPrediction.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\HeroManager.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Interrupter.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Interrupter2.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\ItemData.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Items.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Keys.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\LastCastedSpell.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\MasteryData.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\MEC.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\MinionManager.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\NativeMethods.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\OnValueChangeEventArgs.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Orbwalking.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Packet.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Prediction.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Render.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Spell.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\StringList.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Utility.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\Utils.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\WeightedRandom.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\WindowsMessages.cs" />
+    <Compile Include="Lib\LeagueSharp-Common\WndEventComposition.cs" />
+    <Compile Include="Lib\SPrediction\ArcPrediction.cs" />
+    <Compile Include="Lib\SPrediction\CirclePrediction.cs" />
+    <Compile Include="Lib\SPrediction\ClipperWrapper.cs" />
+    <Compile Include="Lib\SPrediction\Collision.cs" />
+    <Compile Include="Lib\SPrediction\ConePrediction.cs" />
+    <Compile Include="Lib\SPrediction\ConfigMenu.cs" />
+    <Compile Include="Lib\SPrediction\Drawings.cs" />
+    <Compile Include="Lib\SPrediction\Geometry.cs" />
+    <Compile Include="Lib\SPrediction\LinePrediction.cs" />
+    <Compile Include="Lib\SPrediction\Obj_AI_HeroExtensions.cs" />
+    <Compile Include="Lib\SPrediction\PathTracker.cs" />
+    <Compile Include="Lib\SPrediction\Prediction.cs" />
+    <Compile Include="Lib\SPrediction\RingPrediction.cs" />
+    <Compile Include="Lib\SPrediction\SpellExtensions.cs" />
+    <Compile Include="Lib\SPrediction\StasisPrediction.cs" />
+    <Compile Include="Lib\SPrediction\Utility.cs" />
+    <Compile Include="Lib\SPrediction\VectorPrediction.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
