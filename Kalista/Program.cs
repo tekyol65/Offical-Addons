@@ -19,6 +19,8 @@ namespace Kalista
         static LeagueSharp.Common.Spell Q, W, E, R;
         static Menu Menu,draw, combo, harass, laneclear, jungleclear, misc;
         static float getManaPer { get { return Player.Mana / Player.MaxMana * 100; } }
+        static float IntroTimer = Game.Time;
+        static Render.Sprite Intro;
 
         static void Main(string[] args)
         {
@@ -103,6 +105,13 @@ namespace Kalista
             draw.Add("healthbar", new CheckBox("Healthbar overlay"));
             draw.Add("percent", new CheckBox("Damage percent info"));
 
+            Intro = new Render.Sprite(LoadImg("intro"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+            Intro.Add(0);
+            Intro.OnDraw();
+
+            LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
+
+
             DamageIndicator.Initialize(GetComboDamage);
 
             Game.OnUpdate += Game_OnUpdate;
@@ -118,6 +127,16 @@ namespace Kalista
                 
             if (E.CanCast((Obj_AI_Minion)minion) && minion.Health <= E.GetDamage((Obj_AI_Minion)minion))
                 E.Cast();
+        }
+
+        private static System.Drawing.Bitmap LoadImg(string imgName)
+        {
+            var bitmap = Properties.Resources.ResourceManager.GetObject(imgName) as System.Drawing.Bitmap;
+            if (bitmap == null)
+            {
+                Console.WriteLine(imgName + ".png not found.");
+            }
+            return bitmap;
         }
 
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
