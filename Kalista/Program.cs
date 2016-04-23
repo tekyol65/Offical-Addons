@@ -103,6 +103,8 @@ namespace Kalista
             draw.Add("healthbar", new CheckBox("Healthbar overlay"));
             draw.Add("percent", new CheckBox("Damage percent info"));
 
+            DamageIndicator.Initialize(GetComboDamage);
+
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
