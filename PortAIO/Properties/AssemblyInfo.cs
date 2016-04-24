@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Kalista")]
+[assembly: AssemblyTitle("PortAIO")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Pro-Hile")]
-[assembly: AssemblyProduct("Kalista")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("PortAIO")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f172d22a-cc49-4166-9b48-4b8ad045e4c4")]
+[assembly: Guid("45a7c863-81d8-4ddf-93ef-3e2e2db9bfed")]
 
 // Version information for an assembly consists of the following four values:
 //

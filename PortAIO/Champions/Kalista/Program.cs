@@ -1,30 +1,92 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using EloBuddy;
-using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
+﻿using EloBuddy;
+using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using EloBuddy.SDK.Menu;
 using EloBuddy.SDK.Menu.Values;
-using EloBuddy.SDK;
-using Kalista.Lib;
+using LeagueSharp.Common;
+using PortAIO.Lib;
+using SharpDX;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Color = System.Drawing.Color;
 
-namespace Kalista
+namespace PortAIO.Champions.Kalista
 {
     class Program
     {
         static AIHeroClient Player { get { return ObjectManager.Player; } }
         static LeagueSharp.Common.Spell Q, W, E, R;
-        static Menu Menu,draw, combo, harass, laneclear, jungleclear, misc;
+        static Menu Menu, draw, combo, harass, laneclear, jungleclear, misc;
         static float getManaPer { get { return Player.Mana / Player.MaxMana * 100; } }
         static float IntroTimer = Game.Time;
         static Render.Sprite Intro;
 
-        static void Main(string[] args)
+        internal static void Init()
         {
-            Loading.OnLoadingComplete += Loading_OnLoadingComplete;
+            if (Player.Hero != EloBuddy.Champion.Kalista)
+            {
+                return;
+            }
+
+            Q = new LeagueSharp.Common.Spell(SpellSlot.Q, 1150f) { MinHitChance = HitChance.High };
+            W = new LeagueSharp.Common.Spell(SpellSlot.W, 5000f);
+            E = new LeagueSharp.Common.Spell(SpellSlot.E, 1000f);
+            R = new LeagueSharp.Common.Spell(SpellSlot.R, 1500f);
+
+            Q.SetSkillshot(0.25f, 40f, 1200f, true, SkillshotType.SkillshotLine);
+
+            Menu = MainMenu.AddMenu("SS Kalista", "Kalista");
+            Menu.AddLabel("Ported from SharpShooter - Pikachu7");
+
+            combo = Menu.AddSubMenu("Combo", "combo");
+            combo.Add("comboUseQ", new CheckBox("Use Q"));
+            combo.Add("comboUseE", new CheckBox("Use E"));
+
+            harass = Menu.AddSubMenu("Harass", "harass");
+            harass.Add("harassUseQ", new CheckBox("Use Q"));
+            harass.Add("harassMana", new Slider("if Mana % >", 50));
+
+            laneclear = Menu.AddSubMenu("Lane Clear", "laneclear");
+            laneclear.Add("laneclearUseQ", new CheckBox("Use Q"));
+            laneclear.Add("laneclearQnum", new Slider("Cast Q If Can Kill Minion Number >=", 3, 1, 5));
+            laneclear.Add("laneclearUseE", new CheckBox("Use E"));
+            laneclear.Add("laneclearEnum", new Slider("Cast E If Can Kill Minion Number >=", 2, 1, 5));
+            laneclear.Add("laneclearMana", new Slider("if Mana % >", 60));
+
+            jungleclear = Menu.AddSubMenu("Jungle Clear", "jungleclear");
+            jungleclear.Add("jungleclearUseQ", new CheckBox("Use Q"));
+            jungleclear.Add("jungleclearUseE", new CheckBox("Use E"));
+            jungleclear.Add("jungleclearMana", new Slider("if Mana % >", 20));
+
+            misc = Menu.AddSubMenu("Misc", "misc");
+            misc.Add("killsteal", new CheckBox("Use Killsteal (With E)"));
+            misc.Add("mobsteal", new CheckBox("Use Mobsteal (With E)"));
+            misc.Add("lasthitassist", new CheckBox("Use Lasthit Assist (With E)"));
+            misc.Add("soulboundsaver", new CheckBox("Use Soulbound Saver (With R)"));
+            misc.Add("autoEHarass1", new CheckBox("Auto Lasthit a Minion For Harass (With E)", false));
+
+            draw = Menu.AddSubMenu("Drawings", "draw");
+            draw.Add("drawingQ", new CheckBox("Q Range"));
+            draw.Add("drawingW", new CheckBox("W Range", false));
+            draw.Add("drawingE", new CheckBox("E Range"));
+            draw.Add("drawingR", new CheckBox("R Range", false));
+            draw.Add("healthbar", new CheckBox("Healthbar overlay"));
+            draw.Add("percent", new CheckBox("Damage percent info"));
+
+            Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+            Intro.Add(0);
+            Intro.OnDraw();
+
+            LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
+
+
+            DamageIndicator.Initialize(GetComboDamage);
+
+            Game.OnUpdate += Game_OnUpdate;
+            Drawing.OnDraw += Drawing_OnDraw;
+            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Orbwalker.OnUnkillableMinion += Orbwalker_OnUnkillableMinion;
         }
 
         #region menu items
@@ -53,78 +115,12 @@ namespace Kalista
         public static bool percent { get { return draw["percent"].Cast<CheckBox>().CurrentValue; } }
         #endregion
 
-        private static void Loading_OnLoadingComplete(EventArgs args)
-        {
-            if (Player.Hero != Champion.Kalista)
-            {
-                return;
-            }
-
-            Q = new LeagueSharp.Common.Spell(SpellSlot.Q, 1150f) { MinHitChance = HitChance.High };
-            W = new LeagueSharp.Common.Spell(SpellSlot.W, 5000f);
-            E = new LeagueSharp.Common.Spell(SpellSlot.E, 1000f);
-            R = new LeagueSharp.Common.Spell(SpellSlot.R, 1500f);
-
-            Q.SetSkillshot(0.25f, 40f, 1200f, true, SkillshotType.SkillshotLine);
-
-            Menu = MainMenu.AddMenu("SS Kalista", "Kalista");
-            Menu.AddLabel("Ported from SharpShooter - Pikachu7");
-
-            combo = Menu.AddSubMenu("Combo", "combo");
-            combo.Add("comboUseQ", new CheckBox("Use Q"));
-            combo.Add("comboUseE", new CheckBox("Use E"));
-
-            harass = Menu.AddSubMenu("Harass", "harass");
-            harass.Add("harassUseQ", new CheckBox("Use Q"));
-            harass.Add("harassMana", new Slider("if Mana % >", 50));
-            
-            laneclear = Menu.AddSubMenu("Lane Clear", "laneclear");
-            laneclear.Add("laneclearUseQ", new CheckBox("Use Q"));
-            laneclear.Add("laneclearQnum", new Slider("Cast Q If Can Kill Minion Number >=", 3, 1, 5));
-            laneclear.Add("laneclearUseE", new CheckBox("Use E"));
-            laneclear.Add("laneclearEnum", new Slider("Cast E If Can Kill Minion Number >=", 2, 1, 5));
-            laneclear.Add("laneclearMana", new Slider("if Mana % >", 60));
-
-            jungleclear = Menu.AddSubMenu("Jungle Clear", "jungleclear");
-            jungleclear.Add("jungleclearUseQ", new CheckBox("Use Q"));
-            jungleclear.Add("jungleclearUseE", new CheckBox("Use E"));
-            jungleclear.Add("jungleclearMana", new Slider("if Mana % >", 20));
-
-            misc = Menu.AddSubMenu("Misc", "misc");
-            misc.Add("killsteal", new CheckBox("Use Killsteal (With E)"));
-            misc.Add("mobsteal", new CheckBox("Use Mobsteal (With E)"));
-            misc.Add("lasthitassist", new CheckBox("Use Lasthit Assist (With E)"));
-            misc.Add("soulboundsaver", new CheckBox("Use Soulbound Saver (With R)"));
-            misc.Add("autoEHarass1", new CheckBox("Auto Lasthit a Minion For Harass (With E)", false));
-
-            draw = Menu.AddSubMenu("Drawings", "draw");
-            draw.Add("drawingQ", new CheckBox("Q Range"));
-            draw.Add("drawingW", new CheckBox("W Range",false));
-            draw.Add("drawingE", new CheckBox("E Range"));
-            draw.Add("drawingR", new CheckBox("R Range",false));
-            draw.Add("healthbar", new CheckBox("Healthbar overlay"));
-            draw.Add("percent", new CheckBox("Damage percent info"));
-
-            Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
-            Intro.Add(0);
-            Intro.OnDraw();
-
-            LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
-
-
-            DamageIndicator.Initialize(GetComboDamage);
-
-            Game.OnUpdate += Game_OnUpdate;
-            Drawing.OnDraw += Drawing_OnDraw;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
-            Orbwalker.OnUnkillableMinion += Orbwalker_OnUnkillableMinion; 
-        }
 
         private static void Orbwalker_OnUnkillableMinion(Obj_AI_Base minion, Orbwalker.UnkillableMinionArgs args)
         {
             if (!lasthitassist)
                 return;
-                
+
             if (E.CanCast((Obj_AI_Minion)minion) && minion.Health <= E.GetDamage((Obj_AI_Minion)minion))
                 E.Cast();
         }

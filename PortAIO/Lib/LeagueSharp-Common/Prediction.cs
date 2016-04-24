@@ -518,42 +518,43 @@ namespace LeagueSharp.Common
             var result = new PredictionOutput {Input = input};
 
             //Normal dashes.
-            if (!dashData.IsBlink)
+            if (dashData != null)
             {
-                //Mid air:
-                var endP = dashData.Path.Last();
-                var dashPred = GetPositionOnPath(
-                    input, new List<Vector2> {input.Unit.ServerPosition.To2D(), endP}, dashData.Speed);
-                if (dashPred.Hitchance >= HitChance.High &&
-                    dashPred.UnitPosition.To2D().Distance(input.Unit.Position.To2D(), endP, true) < 200)
+                if (!dashData.IsBlink)
                 {
-                    dashPred.CastPosition = dashPred.UnitPosition;
-                    dashPred.Hitchance = HitChance.Dashing;
-                    return dashPred;
-                }
-
-                //At the end of the dash:
-                if (dashData.Path.PathLength() > 200)
-                {
-                    var timeToPoint = input.Delay/2f + input.From.To2D().Distance(endP)/input.Speed - 0.25f;
-                    if (timeToPoint <=
-                        input.Unit.Distance(endP)/dashData.Speed + input.RealRadius/input.Unit.MoveSpeed)
+                    //Mid air:
+                    var endP = dashData.Path.LastOrDefault();
+                    if (endP != null)
                     {
-                        return new PredictionOutput
+                        var dashPred = GetPositionOnPath(input, new List<Vector2> { input.Unit.ServerPosition.To2D(), endP }, dashData.Speed);
+
+                        if (dashPred.Hitchance >= HitChance.High && dashPred.UnitPosition.To2D().Distance(input.Unit.Position.To2D(), endP, true) < 200)
                         {
-                            CastPosition = endP.To3D(),
-                            UnitPosition = endP.To3D(),
-                            Hitchance = HitChance.Dashing
-                        };
+                            dashPred.CastPosition = dashPred.UnitPosition;
+                            dashPred.Hitchance = HitChance.Dashing;
+                            return dashPred;
+                        }
+
+                        //At the end of the dash:
+                        if (dashData.Path.PathLength() > 200)
+                        {
+                            var timeToPoint = input.Delay / 2f + input.From.To2D().Distance(endP) / input.Speed - 0.25f;
+                            if (timeToPoint <= input.Unit.Distance(endP) / dashData.Speed + input.RealRadius / input.Unit.MoveSpeed)
+                            {
+                                return new PredictionOutput
+                                {
+                                    CastPosition = endP.To3D(),
+                                    UnitPosition = endP.To3D(),
+                                    Hitchance = HitChance.Dashing
+                                };
+                            }
+                        }
                     }
+
+                    result.CastPosition = dashData.Path.LastOrDefault().To3D();
+                    result.UnitPosition = result.CastPosition;
                 }
-
-                result.CastPosition = dashData.Path.Last().To3D();
-                result.UnitPosition = result.CastPosition;
-
-                //Figure out where the unit is going.
             }
-
             return result;
         }
 

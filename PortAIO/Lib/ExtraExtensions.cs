@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 using Spell = LeagueSharp.Common.Spell;
 using EloBuddy.SDK;
 
-namespace Kalista.Lib
+namespace PortAIO.Lib
 {
     static class ExtraExtensions
     {

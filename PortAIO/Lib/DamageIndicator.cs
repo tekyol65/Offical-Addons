@@ -5,7 +5,7 @@ using EloBuddy.SDK;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-namespace Kalista.Lib
+namespace PortAIO.Lib
 {
     public static class DamageIndicator
     {

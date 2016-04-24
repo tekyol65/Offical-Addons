@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F172D22A-CC49-4166-9B48-4B8AD045E4C4}</ProjectGuid>
+    <ProjectGuid>{45A7C863-81D8-4DDF-93EF-3E2E2DB9BFED}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Kalista</RootNamespace>
-    <AssemblyName>Kalista</AssemblyName>
+    <RootNamespace>PortAIO</RootNamespace>
+    <AssemblyName>PortAIO</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -59,6 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Champions\Ahri\Ahri.cs" />
+    <Compile Include="Champions\Ahri\Helper.cs" />
+    <Compile Include="Champions\Ahri\Program.cs" />
+    <Compile Include="Champions\Kalista\Program.cs" />
     <Compile Include="Lib\DamageIndicator.cs" />
     <Compile Include="Lib\ExtraExtensions.cs" />
     <Compile Include="Lib\LeagueSharp-Common\AntiGapcloser.cs" />
