@@ -63,6 +63,9 @@
     <Compile Include="Champions\Ahri\Helper.cs" />
     <Compile Include="Champions\Ahri\Program.cs" />
     <Compile Include="Champions\Kalista\Program.cs" />
+    <Compile Include="Champions\Lucian\Program.cs" />
+    <Compile Include="Champions\Sivir\Core\MissileReturn.cs" />
+    <Compile Include="Champions\Sivir\Program.cs" />
     <Compile Include="Champions\Vayne\Program.cs" />
     <Compile Include="Champions\Vayne\SAC\Geometry.cs" />
     <Compile Include="Champions\Vayne\SAC\Tumble.cs" />
@@ -118,6 +121,37 @@
     <Compile Include="Lib\LeagueSharp-Common\WeightedRandom.cs" />
     <Compile Include="Lib\LeagueSharp-Common\WindowsMessages.cs" />
     <Compile Include="Lib\LeagueSharp-Common\WndEventComposition.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Data.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\ChampionDatabase.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\ChampionPriorityData.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\DamageDatabase.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\FlashJukeData.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\GapcloserData.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\InterruptableSpellData.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\ItemDatabase.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\MapData.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\SpellDatabase.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\DataTypes\TrapLocationData.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\CastType.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\CollisionableObjects.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\DamageScalingTarget.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\DamageScalingType.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\DamageStage.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\DangerLevel.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\GapcloserType.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\SpellEffectType.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\SpellTags.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Enumerations\SpellType.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Utility\IFilter.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Utility\JsonFactory.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Utility\Resources\ResourceFactory.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Utility\Resources\ResourceImportAttribute.cs" />
+    <Compile Include="Lib\LeagueSharp-Data\Utility\Resources\ResourceLoader.cs" />
+    <Compile Include="Lib\SebbyLib\Cache.cs" />
+    <Compile Include="Lib\SebbyLib\HealthPrediction.cs" />
+    <Compile Include="Lib\SebbyLib\OktwCommon.cs" />
+    <Compile Include="Lib\SebbyLib\Orbwalking.cs" />
+    <Compile Include="Lib\SebbyLib\PredictionOktw.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -128,6 +162,86 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Resources\6.6.json" />
+    <None Include="Resources\6.7.json" />
+    <None Include="Resources\6.8.json" />
+    <None Include="Resources\Database.json" />
+    <None Include="Resources\Gapclosers.json" />
+    <None Include="Resources\GlobalInterruptableSpellsList.json" />
+    <None Include="Resources\InterruptableSpells.json" />
+    <None Include="Resources\Lucian.json" />
+    <None Include="Resources\Lulu.json" />
+    <None Include="Resources\Lux.json" />
+    <None Include="Resources\Malphite.json" />
+    <None Include="Resources\Malzahar.json" />
+    <None Include="Resources\Maokai.json" />
+    <None Include="Resources\Map.json" />
+    <None Include="Resources\MasterYi.json" />
+    <None Include="Resources\MissFortune.json" />
+    <None Include="Resources\MonkeyKing.json" />
+    <None Include="Resources\Mordekaiser.json" />
+    <None Include="Resources\Morgana.json" />
+    <None Include="Resources\Nami.json" />
+    <None Include="Resources\Nasus.json" />
+    <None Include="Resources\Nautilus.json" />
+    <None Include="Resources\Nidalee.json" />
+    <None Include="Resources\Nocturne.json" />
+    <None Include="Resources\Nunu.json" />
+    <None Include="Resources\Olaf.json" />
+    <None Include="Resources\Orianna.json" />
+    <None Include="Resources\Pantheon.json" />
+    <None Include="Resources\Poppy.json" />
+    <None Include="Resources\Priority.json" />
+    <None Include="Resources\Quinn.json" />
+    <None Include="Resources\Rammus.json" />
+    <None Include="Resources\RekSai.json" />
+    <None Include="Resources\Renekton.json" />
+    <None Include="Resources\Rengar.json" />
+    <None Include="Resources\Riven.json" />
+    <None Include="Resources\Rumble.json" />
+    <None Include="Resources\Ryze.json" />
+    <None Include="Resources\Sejuani.json" />
+    <None Include="Resources\Shaco.json" />
+    <None Include="Resources\Shen.json" />
+    <None Include="Resources\Shyvana.json" />
+    <None Include="Resources\Singed.json" />
+    <None Include="Resources\Sion.json" />
+    <None Include="Resources\Sivir.json" />
+    <None Include="Resources\Skarner.json" />
+    <None Include="Resources\Sona.json" />
+    <None Include="Resources\Soraka.json" />
+    <None Include="Resources\Swain.json" />
+    <None Include="Resources\Syndra.json" />
+    <None Include="Resources\TahmKench.json" />
+    <None Include="Resources\Talon.json" />
+    <None Include="Resources\Taric.json" />
+    <None Include="Resources\Teemo.json" />
+    <None Include="Resources\Thresh.json" />
+    <None Include="Resources\Tristana.json" />
+    <None Include="Resources\Trundle.json" />
+    <None Include="Resources\Tryndamere.json" />
+    <None Include="Resources\TwistedFate.json" />
+    <None Include="Resources\Twitch.json" />
+    <None Include="Resources\Udyr.json" />
+    <None Include="Resources\Urgot.json" />
+    <None Include="Resources\Varus.json" />
+    <None Include="Resources\Vayne.json" />
+    <None Include="Resources\Veigar.json" />
+    <None Include="Resources\Velkoz.json" />
+    <None Include="Resources\Vi.json" />
+    <None Include="Resources\Viktor.json" />
+    <None Include="Resources\Vladimir.json" />
+    <None Include="Resources\Volibear.json" />
+    <None Include="Resources\Warwick.json" />
+    <None Include="Resources\Xerath.json" />
+    <None Include="Resources\XinZhao.json" />
+    <None Include="Resources\Yasuo.json" />
+    <None Include="Resources\Yorick.json" />
+    <None Include="Resources\Zac.json" />
+    <None Include="Resources\Zed.json" />
+    <None Include="Resources\Ziggs.json" />
+    <None Include="Resources\Zilean.json" />
+    <None Include="Resources\Zyra.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -136,7 +250,90 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Aatrox.json" />
+    <None Include="Resources\Ahri.json" />
+    <None Include="Resources\Akali.json" />
+    <None Include="Resources\Alistar.json" />
+    <None Include="Resources\Amumu.json" />
+    <None Include="Resources\Anivia.json" />
+    <None Include="Resources\Annie.json" />
+    <None Include="Resources\Ashe.json" />
+    <None Include="Resources\AurelionSol.json" />
+    <None Include="Resources\Azir.json" />
+    <None Include="Resources\Bard.json" />
+    <None Include="Resources\Blitzcrank.json" />
+    <None Include="Resources\Brand.json" />
+    <None Include="Resources\Braum.json" />
+    <None Include="Resources\Caitlyn.json" />
+    <None Include="Resources\Cassiopeia.json" />
+    <None Include="Resources\Chogath.json" />
+    <None Include="Resources\Corki.json" />
+    <None Include="Resources\Darius.json" />
+    <None Include="Resources\Diana.json" />
+    <None Include="Resources\Draven.json" />
+    <None Include="Resources\DrMundo.json" />
+    <None Include="Resources\Ekko.json" />
+    <None Include="Resources\Elise.json" />
+    <None Include="Resources\Evelynn.json" />
+    <None Include="Resources\Ezreal.json" />
+    <None Include="Resources\FiddleSticks.json" />
+    <None Include="Resources\Fiora.json" />
+    <None Include="Resources\Fizz.json" />
+    <None Include="Resources\Galio.json" />
+    <None Include="Resources\Gangplank.json" />
+    <None Include="Resources\Garen.json" />
+    <None Include="Resources\Gnar.json" />
+    <None Include="Resources\Gragas.json" />
+    <None Include="Resources\Graves.json" />
+    <None Include="Resources\Hecarim.json" />
+    <None Include="Resources\Heimerdinger.json" />
+    <None Include="Resources\Illaoi.json" />
+    <None Include="Resources\Irelia.json" />
+    <None Include="Resources\Janna.json" />
+    <None Include="Resources\JarvanIV.json" />
+    <None Include="Resources\Jax.json" />
+    <None Include="Resources\Jayce.json" />
+    <None Include="Resources\Jhin.json" />
+    <None Include="Resources\Jinx.json" />
+    <None Include="Resources\Kalista.json" />
+    <None Include="Resources\Karma.json" />
+    <None Include="Resources\Karthus.json" />
+    <None Include="Resources\Kassadin.json" />
+    <None Include="Resources\Katarina.json" />
+    <None Include="Resources\Kayle.json" />
+    <None Include="Resources\Kennen.json" />
+    <None Include="Resources\Khazix.json" />
+    <None Include="Resources\Kindred.json" />
+    <None Include="Resources\KogMaw.json" />
+    <None Include="Resources\Leblanc.json" />
+    <None Include="Resources\LeeSin.json" />
+    <None Include="Resources\Leona.json" />
+    <None Include="Resources\Lissandra.json" />
     <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\denymouse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\intro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minimap_Ward_Green_Enemy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Minimap_Ward_Pink_Enemy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mouse1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\mouse2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RecallBar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ScopeSprite.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

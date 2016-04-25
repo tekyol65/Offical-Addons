@@ -14,9 +14,9 @@ namespace PortAIO
             Loading.OnLoadingComplete += Initialize;
         }
         
-        static LeagueSharp.Common.Render.Sprite Intro;
+        static Render.Sprite Intro;
 
-        private static void Initialize(System.EventArgs args)
+        private static void Initialize(EventArgs args)
         {
             switch (ObjectManager.Player.ChampionName.ToLower())
             {
@@ -31,6 +31,20 @@ namespace PortAIO
                     Intro.Add(0);
                     Intro.OnDraw();
                     Champions.Vayne.Program.OnLoad();
+                    LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
+                    break;
+                case "lucian":
+                    Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+                    Intro.Add(0);
+                    Intro.OnDraw();
+                    Champions.Lucian.Program.OnGameLoad();
+                    LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
+                    break;
+                case "sivir":
+                    Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+                    Intro.Add(0);
+                    Intro.OnDraw();
+                    Champions.Sivir.Program.LoadOKTW();
                     LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
                     break;
                 default:
