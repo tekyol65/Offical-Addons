@@ -14,7 +14,7 @@ using Color = System.Drawing.Color;
 namespace PortAIO.Champions.Kalista
 {
     class Program
-    {
+    { 
         static AIHeroClient Player { get { return ObjectManager.Player; } }
         static LeagueSharp.Common.Spell Q, W, E, R;
         static Menu Menu, draw, combo, harass, laneclear, jungleclear, misc;

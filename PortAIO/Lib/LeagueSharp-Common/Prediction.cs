@@ -443,7 +443,7 @@ namespace LeagueSharp.Common
             }
 
             //Unit is dashing.
-            if (input.Unit.IsDashing())
+            if (input.Unit.LSIsDashing())
             {
                 result = GetDashingPrediction(input);
             }
