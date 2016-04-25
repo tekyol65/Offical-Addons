@@ -1,4 +1,5 @@
 ﻿using EloBuddy;
+using EloBuddy.SDK;
 using EloBuddy.SDK.Events;
 using LeagueSharp.Common;
 using SharpDX;
@@ -19,17 +20,18 @@ namespace PortAIO
         {
             switch (ObjectManager.Player.ChampionName.ToLower())
             {
-                case "kalista": // Sharpshooter Kalista
+                case "kalista":
                     Champions.Kalista.Program.Init();
                     break;
                 case "ahri":
-                    Champions.Ahri.Program.Load(); // Beaving Ahri
+                    Champions.Ahri.Program.Load();
                     break;
                 case "vayne":
                     Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
                     Intro.Add(0);
                     Intro.OnDraw();
-                    Champions.Vayne.Program.OnLoad(); //VHR Vayne
+                    Champions.Vayne.Program.OnLoad();
+                    LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
                     break;
                 default:
                     return;
