@@ -21,7 +21,11 @@ namespace PortAIO
             switch (ObjectManager.Player.ChampionName.ToLower())
             {
                 case "kalista":
-                    Champions.Kalista.Program.Init();
+                    Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+                    Intro.Add(0);
+                    Intro.OnDraw();
+                    Champions.Kalista.Kalita.Load();
+                    LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
                     break;
                 case "ahri":
                     Champions.Ahri.Program.Load();
