@@ -68,6 +68,7 @@
     <Compile Include="Champions\Orianna\Program.cs" />
     <Compile Include="Champions\Sivir\Core\MissileReturn.cs" />
     <Compile Include="Champions\Sivir\Program.cs" />
+    <Compile Include="Champions\Soraka\Program.cs" />
     <Compile Include="Champions\Vayne\Program.cs" />
     <Compile Include="Champions\Vayne\SAC\Geometry.cs" />
     <Compile Include="Champions\Vayne\SAC\Tumble.cs" />
