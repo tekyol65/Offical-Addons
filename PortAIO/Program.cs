@@ -47,6 +47,13 @@ namespace PortAIO
                     Champions.Sivir.Program.LoadOKTW();
                     LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
                     break;
+                case "orianna":
+                    Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
+                    Intro.Add(0);
+                    Intro.OnDraw();
+                    Champions.Orianna.Program.Load();
+                    LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
+                    break;
                 default:
                     return;
             }
