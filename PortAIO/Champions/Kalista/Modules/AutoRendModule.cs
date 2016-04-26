@@ -18,8 +18,7 @@ namespace PortAIO.Champions.Kalista.Modules
         public bool ShouldGetExecuted()
         {
             return SpellManager.Spell[SpellSlot.E].IsReady() &&
-                   Kalita.modulesMenu["com.ikalista.modules." + GetName().ToLowerInvariant()].Cast<CheckBox>().CurrentValue &&
-                   Kalita.comboMenu["com.ikalista.combo.useE"].Cast<CheckBox>().CurrentValue;
+                   Kalista.comboMenu["com.ikalista.combo.useE"].Cast<CheckBox>().CurrentValue;
         }
 
         public void OnExecute()
@@ -29,7 +28,7 @@ namespace PortAIO.Champions.Kalista.Modules
                     HeroManager.Enemies.Where(
                         x => x.IsValid && x.HasRendBuff() && SpellManager.Spell[SpellSlot.E].IsInRange(x)))
             {
-                if (source.IsRendKillable() || source.GetRendBuffCount() >= Kalita.comboMenu["com.ikalista.combo.stacks"].Cast<Slider>().CurrentValue)
+                if (source.IsRendKillable() || source.GetRendBuffCount() >= Kalista.comboMenu["com.ikalista.combo.stacks"].Cast<Slider>().CurrentValue)
                 {
                     SpellManager.Spell[SpellSlot.E].Cast();
                 }

@@ -16,9 +16,9 @@ using PortAIO.Lib;
 
 namespace PortAIO.Champions.Kalista
 {
-    internal class Kalita
+    internal class Kalista
     {
-        public static Menu Menu, comboMenu, mixedMenu, laneclearMenu, jungleStealMenu, modulesMenu, drawingMenu;
+        public static Menu Menu, comboMenu, mixedMenu, laneclearMenu, jungleStealMenu, miscMenu, drawingMenu;
 
         public static List<string> JungleMinions = new List<string>
         {
@@ -33,6 +33,12 @@ namespace PortAIO.Champions.Kalista
             "SRU_Red"
         };
 
+        public static Dictionary<string, string> JungleMinion = new Dictionary<string, string>
+        {
+            { "SRU_Baron", "Baron" },
+            { "SRU_Dragon", "Dragon" },
+        };
+
         /// <summary>
         ///     The Modules
         /// </summary>
@@ -43,9 +49,9 @@ namespace PortAIO.Champions.Kalista
             new AutoEModule(),
             new AutoELeavingModule()
         };
-        
 
-        public static void Load()
+
+        public static void OnLoad()
         {
             CreateMenu();
             LoadModules();
@@ -61,6 +67,24 @@ namespace PortAIO.Champions.Kalista
                     args.Process = false;
                 }
             };
+
+            Orbwalker.OnUnkillableMinion += Orbwalker_OnUnkillableMinion;
+        }
+
+        private static void Orbwalker_OnUnkillableMinion(Obj_AI_Base minion, Orbwalker.UnkillableMinionArgs args)
+        {
+            var killableMinion = minion as Obj_AI_Base;
+            if (killableMinion == null || !SpellManager.Spell[SpellSlot.E].IsReady()
+                || ObjectManager.Player.HasBuff("summonerexhaust") || !killableMinion.HasRendBuff())
+            {
+                return;
+            }
+
+            if (laneclearMenu["com.ikalista.laneclear.useEUnkillable"].Cast<CheckBox>().CurrentValue &&
+                killableMinion.IsMobKillable())
+            {
+                SpellManager.Spell[SpellSlot.E].Cast();
+            }
         }
 
         /// <summary>
@@ -100,23 +124,22 @@ namespace PortAIO.Champions.Kalista
                 laneclearMenu.Add("com.ikalista.laneclear.qMinions", new Slider("Min Minions for Q", 3, 1, 10));
                 laneclearMenu.Add("com.ikalista.laneclear.useE", new CheckBox("Use E", true));
                 laneclearMenu.Add("com.ikalista.laneclear.eMinions", new Slider("Min Minions for E", 5, 1, 10));
+                laneclearMenu.Add("com.ikalista.laneclear.useEUnkillable", new CheckBox("E Unkillable Minions", true));
             }
 
             jungleStealMenu = Menu.AddSubMenu("iKalista: Reborn - Jungle Steal", "com.ikalista.jungleSteal");
             {
-                foreach (var minion in JungleMinions)
+                jungleStealMenu.Add("com.ikalista.jungleSteal.enabled", new CheckBox("Use Rend To Steal Jungle Minions", true));
+
+                /*foreach (var minion in JungleMinions)
                 {
-                    jungleStealMenu.Add(minion, new CheckBox(minion, true));
-                }
+                    jungleStealMenu.AddBool("com.ikalista.jungleSteal." + minion, minion, true);
+                }*/
             }
 
-            modulesMenu = Menu.AddSubMenu("iKalista: Reborn - Modules", "com.ikalista.modules");
+            miscMenu = Menu.AddSubMenu("iKalista: Reborn - Misc", "com.ikalista.misc");
             {
-                foreach (var module in Modules)
-                {
-                    modulesMenu.Add("com.ikalista.modules." + module.GetName().ToLowerInvariant(),new CheckBox(
-                        "" + module.GetName(), true));
-                }
+                
             }
 
             drawingMenu = Menu.AddSubMenu("iKalista: Reborn - Drawing", "com.ikalista.drawing");
@@ -282,15 +305,18 @@ namespace PortAIO.Champions.Kalista
                             .FirstOrDefault();
                     if (minion != null)
                     {
-                        Orbwalker.OrbwalkTo(minion.Position);
+                        Orbwalker.OrbwalkTo(minion.ServerPosition);
                     }
                 }
             }
 
-            if (!SpellManager.Spell[SpellSlot.Q].IsReady() || !comboMenu["com.ikalista.combo.useQ"].Cast<CheckBox>().CurrentValue ||
-                ObjectManager.Player.Mana <
-                SpellManager.Spell[SpellSlot.Q].ManaCost + SpellManager.Spell[SpellSlot.E].ManaCost)
+            if (!SpellManager.Spell[SpellSlot.Q].IsReady() || !comboMenu["com.ikalista.combo.useQ"].Cast<CheckBox>().CurrentValue)
                 return;
+
+            if (comboMenu["com.ikalista.combo.saveMana"].Cast<CheckBox>().CurrentValue && ObjectManager.Player.Mana < SpellManager.Spell[SpellSlot.E].ManaCost * 2)
+            {
+                return;
+            }
 
             var target = TargetSelector.GetTarget(SpellManager.Spell[SpellSlot.Q].Range,
                 DamageType.Physical);

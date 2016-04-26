@@ -24,7 +24,7 @@ namespace PortAIO.Champions.Kalista.Modules
         public bool ShouldGetExecuted()
         {
             return SpellManager.Spell[SpellSlot.E].IsReady() &&
-                   Kalita.modulesMenu["com.ikalista.modules." + GetName().ToLowerInvariant()].Cast<CheckBox>().CurrentValue;
+                   Kalista.jungleStealMenu["com.ikalista.jungleSteal.enabled"].Cast<CheckBox>().CurrentValue;
         }
 
         public ModuleType GetModuleType()
@@ -34,23 +34,57 @@ namespace PortAIO.Champions.Kalista.Modules
 
         public void OnExecute()
         {
-            var minion =
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(
-                        x =>
-                            SpellManager.Spell[SpellSlot.E].IsInRange(x) &&
-                            x.IsValidTarget(SpellManager.Spell[SpellSlot.E].Range));
+            var baron =
+                    MinionManager.GetMinions(
+                        ObjectManager.Player.ServerPosition,
+                        SpellManager.Spell[SpellSlot.E].Range,
+                        MinionTypes.All,
+                        MinionTeam.Neutral,
+                        MinionOrderTypes.MaxHealth)
+                        .FirstOrDefault(
+                            x => x.IsValidTarget() && HealthPrediction.GetHealthPrediction(x, 250) + 5 < this.GetBaronReduction(x) && x.Name.Contains("Baron"));
 
-            if (minion == null || minion.CharData.BaseSkinName.Contains("Mini") ||
-                !minion.CharData.BaseSkinName.Contains("SRU_"))
-                return;
-            if (!Kalita.JungleMinions.Contains(minion.CharData.BaseSkinName) ||
-                !Kalita.jungleStealMenu[minion.CharData.BaseSkinName].Cast<CheckBox>().CurrentValue) return;
-            if (minion.IsMobKillable())
+            var dragon =
+                MinionManager.GetMinions(
+                    ObjectManager.Player.ServerPosition,
+                    SpellManager.Spell[SpellSlot.E].Range,
+                    MinionTypes.All,
+                    MinionTeam.Neutral,
+                    MinionOrderTypes.MaxHealth)
+                    .FirstOrDefault(
+                        x => x.IsValidTarget() && HealthPrediction.GetHealthPrediction(x, 250) + 5 < this.GetDragonReduction(x) && x.Name.Contains("Dragon"));
+
+            if ((dragon != null && SpellManager.Spell[SpellSlot.E].CanCast(dragon)) || (baron != null && SpellManager.Spell[SpellSlot.E].CanCast(baron)))
             {
                 SpellManager.Spell[SpellSlot.E].Cast();
             }
         }
-    }
 
+        /// <summary>
+        /// Gets the baron reduction.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns></returns>
+        private float GetBaronReduction(Obj_AI_Base target)
+        {
+            return ObjectManager.Player.HasBuff("barontarget")
+                       ? SpellManager.Spell[SpellSlot.E].GetDamage(target) * 0.5f
+                       : SpellManager.Spell[SpellSlot.E].GetDamage(target);
+        }
+
+
+        /// <summary>
+        /// Gets the dragon reduction.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns></returns>
+        private float GetDragonReduction(Obj_AI_Base target)
+        {
+            return ObjectManager.Player.HasBuff("s5test_dragonslayerbuff")
+                       ? SpellManager.Spell[SpellSlot.E].GetDamage(target)
+                         * (1 - (.07f * ObjectManager.Player.GetBuffCount("s5test_dragonslayerbuff")))
+                       : SpellManager.Spell[SpellSlot.E].GetDamage(target);
+        }
+
+    }
 }

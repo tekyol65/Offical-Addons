@@ -22,7 +22,7 @@ namespace PortAIO.Champions.Kalista.Modules
 
         public bool ShouldGetExecuted()
         {
-            return SpellManager.Spell[SpellSlot.E].IsReady() && Kalita.comboMenu["com.ikalista.combo.eLeaving"].Cast<CheckBox>().CurrentValue;
+            return SpellManager.Spell[SpellSlot.E].IsReady() && Kalista.comboMenu["com.ikalista.combo.eLeaving"].Cast<CheckBox>().CurrentValue;
         }
 
         public ModuleType GetModuleType()
@@ -37,7 +37,7 @@ namespace PortAIO.Champions.Kalista.Modules
                     .FirstOrDefault(x => x.HasRendBuff() && SpellManager.Spell[SpellSlot.E].IsInRange(x));
             if (target == null) return;
             var damage = Math.Ceiling(Helper.GetRendDamage(target) * 100 / target.Health);
-            if (damage >= Kalita.comboMenu["com.ikalista.combo.ePercent"].Cast<Slider>().CurrentValue && target.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition, true) > Math.Pow(SpellManager.Spell[SpellSlot.E].Range * 0.8, 2))
+            if (damage >= Kalista.comboMenu["com.ikalista.combo.ePercent"].Cast<Slider>().CurrentValue && target.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition, true) > Math.Pow(SpellManager.Spell[SpellSlot.E].Range * 0.8, 2))
             {
                 SpellManager.Spell[SpellSlot.E].Cast();
             }

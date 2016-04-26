@@ -24,8 +24,7 @@ namespace PortAIO.Champions.Kalista.Modules
         public bool ShouldGetExecuted()
         {
             return SpellManager.Spell[SpellSlot.E].IsReady() &&
-                   Kalita.comboMenu["com.ikalista.combo.autoE"].Cast<CheckBox>().CurrentValue &&
-                   Kalita.modulesMenu["com.ikalista.modules." + GetName().ToLowerInvariant()].Cast<CheckBox>().CurrentValue;
+                   Kalista.comboMenu["com.ikalista.combo.autoE"].Cast<CheckBox>().CurrentValue;
         }
 
         public ModuleType GetModuleType()
@@ -35,7 +34,7 @@ namespace PortAIO.Champions.Kalista.Modules
 
         public void OnExecute()
         {
-            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear)  || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
+            if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Harass) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear) || Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
             {
                 var enemy = HeroManager.Enemies.Where(hero => hero.HasRendBuff()).MinOrDefault(hero => hero.Distance(ObjectManager.Player, true));
                 if (enemy?.Distance(ObjectManager.Player, true) <
@@ -46,7 +45,7 @@ namespace PortAIO.Champions.Kalista.Modules
                             .Any(
                                 x =>
                                     SpellManager.Spell[SpellSlot.E].IsInRange(x) && x.HasRendBuff() &&
-                                    Helper.GetRendDamage(x) >= x.Health + 5))
+                                    x.IsRendKillable()))
                     {
                         SpellManager.Spell[SpellSlot.E].Cast();
                     }
