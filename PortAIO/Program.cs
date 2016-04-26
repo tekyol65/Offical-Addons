@@ -37,7 +37,7 @@ namespace PortAIO
                     Intro = new Render.Sprite(LoadImg("logo"), new Vector2((Drawing.Width / 2) - 500, (Drawing.Height / 2) - 350));
                     Intro.Add(0);
                     Intro.OnDraw();
-                    Champions.Lucian.Program.OnGameLoad();
+                    Champions.Lucian.Program.OnLoad();
                     LeagueSharp.Common.Utility.DelayAction.Add(7000, () => Intro.Remove());
                     break;
                 case "sivir":

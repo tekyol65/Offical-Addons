@@ -63,6 +63,12 @@
     <Compile Include="Champions\Ahri\Helper.cs" />
     <Compile Include="Champions\Ahri\Program.cs" />
     <Compile Include="Champions\Kalista\Program.cs" />
+    <Compile Include="Champions\Lucian\CustomAntiGapcloser.cs" />
+    <Compile Include="Champions\Lucian\Helper.cs" />
+    <Compile Include="Champions\Lucian\LucianCalculator.cs" />
+    <Compile Include="Champions\Lucian\LucianDrawing.cs" />
+    <Compile Include="Champions\Lucian\LucianMenu.cs" />
+    <Compile Include="Champions\Lucian\LucianSpells.cs" />
     <Compile Include="Champions\Lucian\Program.cs" />
     <Compile Include="Champions\Orianna\BallManager.cs" />
     <Compile Include="Champions\Orianna\Program.cs" />
